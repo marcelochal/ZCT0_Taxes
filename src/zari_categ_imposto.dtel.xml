@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZARI_CATEG_IMPOSTO</ROLLNAME>
+    <DDLANGUAGE>P</DDLANGUAGE>
+    <DOMNAME>ZARI_CATEG_IMPOSTO</DOMNAME>
+    <HEADLEN>13</HEADLEN>
+    <SCRLEN1>06</SCRLEN1>
+    <SCRLEN2>13</SCRLEN2>
+    <SCRLEN3>20</SCRLEN3>
+    <DDTEXT>Categoria do imposto</DDTEXT>
+    <REPTEXT>Categ.Imposto</REPTEXT>
+    <SCRTEXT_S>Categ.</SCRTEXT_S>
+    <SCRTEXT_M>Categ.Imposto</SCRTEXT_M>
+    <SCRTEXT_L>Categoria do imposto</SCRTEXT_L>
+    <ACTFLAG>I</ACTFLAG>
+    <DTELMASTER>P</DTELMASTER>
+    <RESERVEDTE>JB</RESERVEDTE>
+    <REFKIND>D</REFKIND>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

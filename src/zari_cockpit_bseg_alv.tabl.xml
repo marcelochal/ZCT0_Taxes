@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_TABL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD02V>
+    <TABNAME>ZARI_COCKPIT_BSEG_ALV</TABNAME>
+    <DDLANGUAGE>P</DDLANGUAGE>
+    <TABCLASS>INTTAB</TABCLASS>
+    <LANGDEP>X</LANGDEP>
+    <DDTEXT>Cockpit: estrutura para ALV da tabela ZARI_BSEG</DDTEXT>
+   </DD02V>
+   <DD03P_TABLE>
+    <DD03P>
+     <TABNAME>ZARI_COCKPIT_BSEG_ALV</TABNAME>
+     <FIELDNAME>.INCLUDE</FIELDNAME>
+     <DDLANGUAGE>P</DDLANGUAGE>
+     <POSITION>0001</POSITION>
+     <ADMINFIELD>0</ADMINFIELD>
+     <PRECFIELD>ZARI_BSEG</PRECFIELD>
+     <MASK>      S</MASK>
+     <DDTEXT>Item - Documento do SAP</DDTEXT>
+     <COMPTYPE>S</COMPTYPE>
+    </DD03P>
+    <DD03P>
+     <TABNAME>ZARI_COCKPIT_BSEG_ALV</TABNAME>
+     <FIELDNAME>ORDEM_ELEMPEP</FIELDNAME>
+     <POSITION>0050</POSITION>
+     <ROLLNAME>CHAR16</ROLLNAME>
+     <ADMINFIELD>0</ADMINFIELD>
+     <COMPTYPE>E</COMPTYPE>
+    </DD03P>
+    <DD03P>
+     <TABNAME>ZARI_COCKPIT_BSEG_ALV</TABNAME>
+     <FIELDNAME>LFA1_MCOD1</FIELDNAME>
+     <POSITION>0051</POSITION>
+     <ROLLNAME>MCDK1</ROLLNAME>
+     <ADMINFIELD>0</ADMINFIELD>
+     <COMPTYPE>E</COMPTYPE>
+    </DD03P>
+   </DD03P_TABLE>
+  </asx:values>
+ </asx:abap>
+</abapGit>

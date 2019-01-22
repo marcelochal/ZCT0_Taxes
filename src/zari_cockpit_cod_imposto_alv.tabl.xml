@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_TABL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD02V>
+    <TABNAME>ZARI_COCKPIT_COD_IMPOSTO_ALV</TABNAME>
+    <DDLANGUAGE>P</DDLANGUAGE>
+    <TABCLASS>INTTAB</TABCLASS>
+    <LANGDEP>X</LANGDEP>
+    <DDTEXT>Cockpit: código do imposto</DDTEXT>
+   </DD02V>
+   <DD03P_TABLE>
+    <DD03P>
+     <TABNAME>ZARI_COCKPIT_COD_IMPOSTO_ALV</TABNAME>
+     <FIELDNAME>.INCLUDE</FIELDNAME>
+     <DDLANGUAGE>P</DDLANGUAGE>
+     <POSITION>0001</POSITION>
+     <ADMINFIELD>0</ADMINFIELD>
+     <PRECFIELD>ZARI_COD_IMPOSTO</PRECFIELD>
+     <MASK>      S</MASK>
+     <DDTEXT>Código de imposto</DDTEXT>
+     <COMPTYPE>S</COMPTYPE>
+    </DD03P>
+    <DD03P>
+     <TABNAME>ZARI_COCKPIT_COD_IMPOSTO_ALV</TABNAME>
+     <FIELDNAME>CHECK</FIELDNAME>
+     <POSITION>0026</POSITION>
+     <ROLLNAME>XFELD</ROLLNAME>
+     <ADMINFIELD>0</ADMINFIELD>
+     <VALEXI>X</VALEXI>
+     <SHLPORIGIN>F</SHLPORIGIN>
+     <COMPTYPE>E</COMPTYPE>
+    </DD03P>
+   </DD03P_TABLE>
+  </asx:values>
+ </asx:abap>
+</abapGit>

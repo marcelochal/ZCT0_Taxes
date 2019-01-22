@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_TRAN" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSTC>
+    <TCODE>ZARI_JUROS_MULTA</TCODE>
+    <CINFO>Ag==</CINFO>
+   </TSTC>
+   <TSTCC>
+    <TCODE>ZARI_JUROS_MULTA</TCODE>
+    <S_WEBGUI>1</S_WEBGUI>
+    <S_WIN32>X</S_WIN32>
+    <S_PLATIN>X</S_PLATIN>
+   </TSTCC>
+   <TSTCT>
+    <SPRSL>P</SPRSL>
+    <TCODE>ZARI_JUROS_MULTA</TCODE>
+    <TTEXT>Tipo do Imposto</TTEXT>
+   </TSTCT>
+   <TSTCP>
+    <TCODE>ZARI_JUROS_MULTA</TCODE>
+    <PARAM>/*SM30 VIEWNAME=ZARIV_juros_mult;UPDATE=X;</PARAM>
+   </TSTCP>
+  </asx:values>
+ </asx:abap>
+</abapGit>
