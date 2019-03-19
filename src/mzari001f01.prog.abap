@@ -2380,31 +2380,84 @@ FORM executa_zpag .
       PERFORM f_montar_campo_tela TABLES lt_bdc
                                   USING ' '  'BSEG-ZFBDT'  v_data.
 
-      PERFORM f_montar_campo_tela TABLES lt_bdc
-                                  USING:
-              'X'  'SAPLZPCT_GUIAS'          '9000',
-              ' '  'BDC_OKCODE'              '=OK'.
-      if ws_1200_bkpf-TIPO_IMPOSTO ne 'ISS'.
+*--> Início - Alteração  15.03.2019 11:19:31 - WR005118
+* De acordo com informação funcional quando o fornecedor possui mais de uma entrada na
+* tabela ZPCT_PGTO_FOR o sistema chama a tela 8000 para determinar o tipo de pagamento
+* com código de barras ou sem código de barras.
+      DATA: lv_qtd_form_pagto TYPE i,
+            lv_nrpgt(4)       TYPE n.
+      IF ws_1200_bkpf-tipo_imposto = 'PCC'  OR
+         ws_1200_bkpf-tipo_imposto = 'CSLL' OR
+         ws_1200_bkpf-tipo_imposto = 'IRRF' OR
+         ws_1200_bkpf-tipo_imposto = 'PIS'  OR
+         ws_1200_bkpf-tipo_imposto = 'COFIN'.
+        SELECT COUNT(*)
+          FROM zpct_pgto_for
+          INTO lv_qtd_form_pagto
+         WHERE lifnr = ws_1200_bkpf-lifnr_imposto.
+
+        IF lv_qtd_form_pagto > 1. "Chama a tela 8000
+* De acordo com informação funcional o número do pagamento é definido da seguinte forma:
+* se o código de barras (CODBAR) da tela SAPMZARI001 1210 estiver preenchido
+* selecionar o 220 caso contrario selecionar o 0010
+
+          IF ws_1200_bkpf-codbar IS INITIAL.
+            lv_nrpgt = '10'.
+          ELSE.
+            lv_nrpgt = '220'.
+          ENDIF.
+
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                      USING:
+                  'X'  'SAPLZPCT_GUIAS'          '8000',
+                  ' '  'ZPCT_PGTO_DEF-NRPGT'     lv_nrpgt,
+                  ' '  'BDC_OKCODE'              '=OK'.
+
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                    USING:
+                  'X'  'SAPLZPCT_GUIAS'          '9000',
+                  ' '  'BDC_OKCODE'              '=OK',
+                  ' '  'WV_CODBAR'   ws_1200_bkpf-codbar.
+
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                    USING:
+                  'X'  'SAPMSSY0'                 '0120',
+                  ' '  'BDC_OKCODE'               '=&ONT'.
+
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                          USING:
+                  'X'  'SAPMZFI0001'              '1000',
+                  ' '  'BDC_OKCODE'               '/EBACK'.
+
+        ENDIF.
+      ENDIF.
+*<-- Fim - 15.03.2019 11:19:31
+
         PERFORM f_montar_campo_tela TABLES lt_bdc
-                                   USING:
-               ' '  'ZPCT_PGTO_ITEM-NOMCON'   ws_1200_bkpf-bbranch_name,
-               ' '  'ZPCT_PGTO_ITEM-CDPAGT'   ws_1200_bkpf-cod_imposto_guia,
-               ' '  'WV_INSCRICAO'            ws_1200_bkpf-cnpj,
-               ' '  'ZPCT_PGTO_ITEM-COMPET'   ws_1200_bkpf-referencia.
-      endif.
+                                    USING:
+                'X'  'SAPLZPCT_GUIAS'          '9000',
+                ' '  'BDC_OKCODE'              '=OK'.
+        IF ws_1200_bkpf-tipo_imposto NE 'ISS'.
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                     USING:
+                 ' '  'ZPCT_PGTO_ITEM-NOMCON'   ws_1200_bkpf-bbranch_name,
+                 ' '  'ZPCT_PGTO_ITEM-CDPAGT'   ws_1200_bkpf-cod_imposto_guia,
+                 ' '  'WV_INSCRICAO'            ws_1200_bkpf-cnpj,
+                 ' '  'ZPCT_PGTO_ITEM-COMPET'   ws_1200_bkpf-referencia.
+        ENDIF.
 *--> Início - Alteração  20.12.2018 11:47:55 - WR005118
 *     ' '  'ZPCT_PGTO_ITEM-NRREFE'   ws_1200_bkpf-referencia.       "Referencia da Guia de Recolhimento
-      if WV_CODBAR is NOT INITIAL.
-        PERFORM f_montar_campo_tela TABLES lt_bdc
-                                   USING:
-               ' '  'WV_CODBAR'   WV_CODBAR.       "Referencia da Guia de Recolhimento
-      endif.
+        IF wv_codbar IS NOT INITIAL.
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                     USING:
+                 ' '  'WV_CODBAR'   wv_codbar.       "Referencia da Guia de Recolhimento
+        ENDIF.
 
-      if ws_1200_bkpf-TIPO_IMPOSTO ne 'INSS' and ws_1200_bkpf-TIPO_IMPOSTO ne 'ISS'.
-        PERFORM f_montar_campo_tela TABLES lt_bdc
-                                   USING:
-               ' '  'ZPCT_PGTO_ITEM-NRREFE'   ws_1200_bkpf-referencia.       "Referencia da Guia de Recolhimento
-      endif.
+        IF ws_1200_bkpf-tipo_imposto NE 'INSS' AND ws_1200_bkpf-tipo_imposto NE 'ISS'.
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                     USING:
+                 ' '  'ZPCT_PGTO_ITEM-NRREFE'   ws_1200_bkpf-referencia.       "Referencia da Guia de Recolhimento
+        ENDIF.
 *<-- Fim - 20.12.2018 11:47:55
 
 
@@ -2417,34 +2470,47 @@ FORM executa_zpag .
 *            ' '  'ZPCT_PGTO_ITEM-ENDEST'   WS_1200_BKPF-.
 
 *--> Início - Alteração  20.12.2018 11:47:29 - WR005118
-      if ws_1200_bkpf-TIPO_IMPOSTO ne 'INSS' and ws_1200_bkpf-TIPO_IMPOSTO ne 'ISS'.
-        CLEAR v_data.
-        WRITE ws_1200_bkpf-data_recolhimento TO v_data.
-        PERFORM f_montar_campo_tela TABLES lt_bdc
-                                    USING ' '  'ZPCT_PGTO_ITEM-PRAPUR'  v_data.
-      endif.
+*--> Início - Alteração  14.03.2019 16:33:37 - WR005118
+        IF ws_1200_bkpf-tipo_imposto = 'PCC'  OR
+           ws_1200_bkpf-tipo_imposto = 'CSLL' OR
+           ws_1200_bkpf-tipo_imposto = 'IRRF' OR
+           ws_1200_bkpf-tipo_imposto = 'PIS'  OR
+           ws_1200_bkpf-tipo_imposto = 'COFIN'.
+
+          PERFORM get_periodo_apuracao CHANGING v_data.
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                      USING ' '  'ZPCT_PGTO_ITEM-PRAPUR'  v_data.
+
+*<-- Fim - 14.03.2019 16:33:37
+        ELSEIF ws_1200_bkpf-tipo_imposto NE 'INSS' AND ws_1200_bkpf-tipo_imposto NE 'ISS'.
+          CLEAR v_data.
+          WRITE ws_1200_bkpf-data_recolhimento TO v_data.
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                      USING ' '  'ZPCT_PGTO_ITEM-PRAPUR'  v_data.
+
+        ENDIF.
 *<-- Fim - 20.12.2018 11:47:29
 
-      CLEAR v_data.
+        CLEAR v_data.
 *--> Início - Alteração  21.12.2018 10:25:24 - WR005118
 
-      if ws_1200_bkpf-TIPO_IMPOSTO ne 'ISS'.
-*WRITE ws_1200_bkpf-data_vencimento TO v_data.
-        write GS_1210_BKPF_ALV-DATA_VENCIMENTO TO v_data.
+        IF ws_1200_bkpf-tipo_imposto NE 'ISS'.
+          WRITE ws_1200_bkpf-data_vencimento TO v_data.
+*        write GS_1210_BKPF_ALV-DATA_VENCIMENTO TO v_data.
 *<-- Fim - 21.12.2018 10:25:24
 
+          PERFORM f_montar_campo_tela TABLES lt_bdc
+                                      USING ' '  'ZPCT_PGTO_ITEM-DATVEN'  v_data.
+        ENDIF.
         PERFORM f_montar_campo_tela TABLES lt_bdc
-                                    USING ' '  'ZPCT_PGTO_ITEM-DATVEN'  v_data.
-      endif.
-      PERFORM f_montar_campo_tela TABLES lt_bdc
-                                  USING:
-              'X'  'SAPMSSY0'                 '0120',
-              ' '  'BDC_OKCODE'               '=&ONT'.
+                                    USING:
+                'X'  'SAPMSSY0'                 '0120',
+                ' '  'BDC_OKCODE'               '=&ONT'.
 
-      PERFORM f_montar_campo_tela TABLES lt_bdc
-                                  USING:
-              'X'  'SAPMZFI0001'              '1000',
-              ' '  'BDC_OKCODE'               '/EBACK'.
+        PERFORM f_montar_campo_tela TABLES lt_bdc
+                                    USING:
+                'X'  'SAPMZFI0001'              '1000',
+                ' '  'BDC_OKCODE'               '/EBACK'.
 
       CALL TRANSACTION 'ZPAG'
         USING lt_bdc
@@ -4407,4 +4473,36 @@ FORM guarda_msg  USING    p_id     TYPE symsgid
   WRITE p_v3 TO <msg>-msgv3.
   WRITE p_v4 TO <msg>-msgv4.
 
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form GET_PERIODO_APURACAO
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*&      <-- V_DATA
+*&---------------------------------------------------------------------*
+FORM get_periodo_apuracao  CHANGING p_v_data TYPE char10.
+  DATA: lv_datum TYPE datum,
+        lv_mes   TYPE fsh_months VALUE 1.
+
+  MOVE sy-datum TO lv_datum.
+
+  CALL FUNCTION 'FSH_CALC_DATE_IN_INTERVAL'
+    EXPORTING
+      iv_date      = lv_datum
+      iv_days      = 0
+      iv_months    = lv_mes
+      iv_signum    = '-'
+      iv_years     = 0
+    IMPORTING
+      ev_calc_date = lv_datum.
+
+  CALL FUNCTION 'HR_HCP_GET_LAST_DAY_OF_MONTH'
+    EXPORTING
+      im_date              = lv_datum
+    IMPORTING
+*     EX_DATE_IS_MONTHEND  =
+      ex_last_day_of_month = lv_datum.
+
+  WRITE lv_datum TO p_v_data.
 ENDFORM.
